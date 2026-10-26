@@ -39,12 +39,6 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Hugo mod init
-        run: |
-          if [ ! -f go.mod ]; then
-            hugo mod init github.com/Megumi-02/blog
-          fi
-
       - name: Build
         run: hugo --minify 2>&1 | tee build.log
 

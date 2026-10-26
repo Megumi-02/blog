@@ -34,125 +34,20 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Setup PaperMod theme
-        run: |
-          # 克隆 PaperMod 主题
-          git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
-
-          # 清理旧文件
-          rm -rf config content i18n go.mod hugo.toml
-
-          # 创建配置
-          cat > hugo.toml << 'ENDOFCONFIG'
-          baseURL = "https://blog.ruusu.cn/"
-          title = "bell"
-          theme = "PaperMod"
-          paginate = 5
-          hasCJKLanguage = true
-
-          [params]
-            description = "运维工程师 · 折腾机器的人"
-            author = "bell"
-            ShowToc = true
-            ShowReadingTime = true
-            ShowShareButtons = true
-            ShowPostNavLinks = true
-            ShowBreadCrumbs = true
-            ShowCodeCopyButtons = true
-
-          [menu]
-            [[menu.main]]
-              identifier = "home"
-              name = "首页"
-              url = "/"
-              weight = 10
-            [[menu.main]]
-              identifier = "posts"
-              name = "文章"
-              url = "/posts/"
-              weight = 20
-            [[menu.main]]
-              identifier = "tags"
-              name = "标签"
-              url = "/tags/"
-              weight = 30
-            [[menu.main]]
-              identifier = "about"
-              name = "关于"
-              url = "/about/"
-              weight = 40
-          ENDOFCONFIG
-
-          # 创建内容目录
-          mkdir -p content/posts
-          mkdir -p content/about
-
-          # 第一篇博客
-          cat > content/posts/hello-world.md << 'ENDOFMD'
-          ---
-          title: "你好，世界"
-          date: 2026-10-26
-          draft: false
-          tags: ["随笔"]
-          ---
-
-          你好，世界。
-
-          这是我的第一篇博客。我是 bell，一名运维工程师，日常和 Linux 服务器、网络、虚拟化与性能测试打交道。
-
-          这个博客用来记录技术笔记、排障经验、压测心得，还有一些折腾机器的日常。
-
-          技术方向：
-          - Linux（RedHat / Rocky）
-          - KVM 虚拟化
-          - 服务器运维与性能测试
-          - 交换机配置与网络调优
-
-          以后会慢慢把踩过的坑都写在这里。
-          ENDOFMD
-
-          # 关于页面
-          cat > content/about/_index.md << 'ENDOFMD'
-          ---
-          title: "关于我"
-          ---
-
-          你好，我是 bell。
-
-          一名运维工程师，日常和 Linux 服务器、网络、虚拟化与性能测试打交道。
-
-          平时在部署、排障、压测和自动化之间来回切换。做点东西，也顺手记点东西。
-
-          GitHub: https://github.com/Megumi-02
-          ENDOFMD
-
-          # 生成 CNAME
-          echo 'blog.ruusu.cn' > CNAME
-
-          echo "=== hugo.toml ==="
-          cat hugo.toml
+      - name: Setup theme
+        run: git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
 
       - name: Build
-        run: hugo --minify 2>&1 | tee build.log
-
-      - name: Upload build log
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build.log
+        run: hugo --minify
 
       - name: Setup Pages
-        if: success()
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        if: success()
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
       - name: Deploy to GitHub Pages
-        if: success()
         id: deployment
         uses: actions/deploy-pages@v4

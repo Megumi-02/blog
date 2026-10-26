@@ -45,7 +45,7 @@ jobs:
           git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
 
       - name: Build
-        run: hugo --minify
+        run: hugo --minify --verbose --logLevel info
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

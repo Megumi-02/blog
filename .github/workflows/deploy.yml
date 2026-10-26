@@ -28,11 +28,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -47,29 +42,41 @@ jobs:
           # 清理旧文件
           rm -rf config content i18n go.mod hugo.toml archetypes data layouts static assets
 
-          # 复制 demo 的全部文件
-          cp -r themes/hugo-theme-stack/demo/* .
+          # 创建 config/_default 目录
+          mkdir -p config/_default
 
-          # 删掉 go.mod 里的 replace 行（主题仓库内部用的，我们不需要）
-          sed -i '/^replace/d' go.mod
+          # 自己写最简 hugo.toml，纯传统 theme 方式，不用 module
+          cat > config/_default/hugo.toml << 'EOF'
+baseURL = "https://blog.ruusu.cn/"
+title = "bell"
+theme = "hugo-theme-stack"
+paginate = 10
+defaultContentLanguage = "en"
+hasCJKLanguage = true
+EOF
 
-          # 改 go.mod 的模块名
-          sed -i 's|^module .*|module github.com/Megumi-02/blog|' go.mod
+          # 复制 demo 的其他配置文件（除了 hugo.toml 和 module.toml）
+          cp themes/hugo-theme-stack/demo/config/_default/params.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/languages.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/markup.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/menu.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/related.toml config/_default/
+
+          # 复制 demo 的内容
+          cp -r themes/hugo-theme-stack/demo/content content
 
           # 删掉 shortcodes 示例页
           rm -rf content/post/shortcodes
 
-          # 改 baseURL 和 title
-          sed -i 's|baseURL = .*|baseURL = "https://blog.ruusu.cn/"|' config/_default/hugo.toml
-          sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
-
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
-          echo "=== go.mod ==="
-          cat go.mod
+          echo "=== hugo.toml ==="
+          cat config/_default/hugo.toml
           echo "=== config files ==="
           ls config/_default/
+          echo "=== theme exists? ==="
+          ls themes/hugo-theme-stack/ | head -10
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

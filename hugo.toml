@@ -2,48 +2,7 @@ baseURL = "https://megumi-02.github.io/blog/"
 title = "bell"
 theme = "hugo-theme-stack"
 defaultContentLanguage = "zh"
-defaultContentLanguageInSubdir = false
-hasCJKLanguage = true
 paginate = 10
 
-[languages]
-  [languages.zh]
-    languageName = "中文"
-    weight = 1
-  [languages.en]
-    languageName = "English"
-    weight = 2
-
 [params]
-  description = "运维工程师的博客 · Ops Engineer's Blog"
   mainSections = ["posts"]
-  sidebarCaption = "bell"
-
-[params.avatar]
-  enabled = true
-  url = "https://avatars.githubusercontent.com/u/98460303?v=4"
-
-[params.widgets]
-  recentPosts = true
-
-[menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "首页"
-    url = "/"
-    weight = 1
-  [[menu.main]]
-    identifier = "posts"
-    name = "文章"
-    url = "/posts/"
-    weight = 2
-  [[menu.main]]
-    identifier = "about"
-    name = "关于"
-    url = "/about/"
-    weight = 3
-  [[menu.main]]
-    identifier = "github"
-    name = "GitHub"
-    url = "https://github.com/Megumi-02"
-    weight = 4

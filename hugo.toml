@@ -1,0 +1,46 @@
+baseURL = "https://megumi-02.github.io/blog/"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh"
+defaultContentLanguageInSubdir = false
+title = "bell"
+theme = "hugo-theme-stack"
+paginate = 10
+
+# 中英文内容目录约定：
+#   content/        中文（默认语言）
+#   content/en/     英文
+# 发布文章时，中文放 content/posts/xxx.md，英文放 content/en/posts/xxx.md
+
+[params]
+  description = "运维工程师的博客 · Ops Engineer's Blog"
+  mainSections = ["posts"]
+  sidebarCaption = "bell"
+
+[params.avatar]
+  enabled = true
+  url = "https://avatars.githubusercontent.com/u/98460303?v=4"
+
+[params.widgets]
+  recentPosts = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 3
+  [[menu.main]]
+    identifier = "github"
+    name = "GitHub"
+    url = "https://github.com/Megumi-02"
+    weight = 4

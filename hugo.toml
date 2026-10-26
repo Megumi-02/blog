@@ -1,8 +1,36 @@
-baseURL = "https://megumi-02.github.io/blog/"
+baseURL = "https://blog.ruusu.cn/"
 title = "bell"
-defaultContentLanguage = "zh"
-paginate = 10
+theme = "PaperMod"
+paginate = 5
 
-[module]
-  [[module.imports]]
-    path = "github.com/CaiJimmy/hugo-theme-stack/v4"
+[params]
+  description = "bell's Blog"
+  author = "bell"
+  ShowToc = true
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 20
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 30
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 40

@@ -49,6 +49,8 @@ jobs:
           # 用 demo 的内容，先跑通
           rm -rf content i18n
           cp -r themes/hugo-theme-stack/demo/content content
+          # 删掉 shortcodes 示例页（引用了不存在的短代码）
+          rm -rf content/post/shortcodes
           echo "=== config files ==="
           ls config/_default/
           echo "=== content structure ==="

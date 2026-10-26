@@ -39,32 +39,46 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Setup Stack theme
+      - name: Init Hugo modules
         run: |
-          # 克隆主题
-          git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
+          # 清理旧文件
+          rm -rf themes content config i18n go.mod hugo.toml
 
-          # 直接用 demo 的全部文件作为项目基础
-          rm -rf config content i18n layouts static archetypes data go.mod hugo.toml
-          cp -r themes/hugo-theme-stack/demo/* .
-          cp themes/hugo-theme-stack/demo/go.mod .
+          # 初始化 Hugo 模块
+          hugo mod init github.com/Megumi-02/blog
 
-          # 删掉 shortcodes 示例页（引用了不存在的短代码）
+          # 创建最简配置，引用 v4 主题
+          cat > hugo.toml << 'EOF'
+baseURL = "https://blog.ruusu.cn/"
+title = "bell"
+paginate = 10
+defaultContentLanguage = "en"
+hasCJKLanguage = true
+
+[module]
+  [[module.imports]]
+    path = "github.com/CaiJimmy/hugo-theme-stack/v4"
+EOF
+
+          # 拉取主题模块
+          hugo mod get github.com/CaiJimmy/hugo-theme-stack/v4
+
+          # 用 v4 demo 的内容
+          cp -r themes/github.com/!cai!jimmy/hugo-theme-stack/v4/demo/content content
+          cp -r themes/github.com/!cai!jimmy/hugo-theme-stack/v4/demo/config config
+
+          # 删掉 shortcodes 示例页
           rm -rf content/post/shortcodes
-
-          # 修改 baseURL 和 title
-          sed -i 's|baseURL = .*|baseURL = "https://blog.ruusu.cn/"|' config/_default/hugo.toml
-          sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
 
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
           echo "=== project structure ==="
           ls -la
-          echo "=== config files ==="
-          ls config/_default/
-          echo "=== content structure ==="
-          find content -type f | head -20
+          echo "=== hugo version ==="
+          hugo version
+          echo "=== themes ==="
+          find themes -maxdepth 3 -type d
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

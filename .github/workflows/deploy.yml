@@ -28,16 +28,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 'latest'
           extended: true
+
+      - name: Setup Stack theme
+        run: |
+          git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
+          mkdir -p config/_default
+          cp themes/hugo-theme-stack/demo/config/_default/*.toml config/_default/
+          rm -f hugo.toml
+          # 把 demo 的 module 引用改成传统 theme 方式
+          sed -i 's|\[\[module.imports\]\]|# [[module.imports]]|g' config/_default/hugo.toml
+          echo 'theme = "hugo-theme-stack"' >> config/_default/hugo.toml
+          # 改成用户的 baseURL
+          sed -i 's|baseURL = .*|baseURL = "https://megumi-02.github.io/blog/"|' config/_default/hugo.toml
+          sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

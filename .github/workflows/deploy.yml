@@ -40,12 +40,19 @@ jobs:
           mkdir -p config/_default
           cp themes/hugo-theme-stack/demo/config/_default/*.toml config/_default/
           rm -f hugo.toml
-          # 把 demo 的 module 引用改成传统 theme 方式
-          sed -i 's|\[\[module.imports\]\]|# [[module.imports]]|g' config/_default/hugo.toml
+          # 用传统 theme 方式，不用 Hugo Modules
+          sed -i '/\[\[module.imports\]\]/,/^$/d' config/_default/hugo.toml
           echo 'theme = "hugo-theme-stack"' >> config/_default/hugo.toml
-          # 改成用户的 baseURL
+          # 改成用户的配置
           sed -i 's|baseURL = .*|baseURL = "https://megumi-02.github.io/blog/"|' config/_default/hugo.toml
           sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
+          # 用 demo 的内容，先跑通
+          rm -rf content i18n
+          cp -r themes/hugo-theme-stack/demo/content content
+          echo "=== config files ==="
+          ls config/_default/
+          echo "=== content structure ==="
+          find content -type f | head -20
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

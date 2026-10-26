@@ -28,6 +28,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -36,23 +41,26 @@ jobs:
 
       - name: Setup Stack theme
         run: |
+          # 克隆主题
           git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
-          mkdir -p config/_default
-          cp themes/hugo-theme-stack/demo/config/_default/*.toml config/_default/
-          rm -f hugo.toml
-          # 用传统 theme 方式，不用 Hugo Modules
-          sed -i '/\[\[module.imports\]\]/,/^$/d' config/_default/hugo.toml
-          echo 'theme = "hugo-theme-stack"' >> config/_default/hugo.toml
-          # 改成用户的配置
-          sed -i 's|baseURL = .*|baseURL = "https://blog.ruusu.cn/"|' config/_default/hugo.toml
-          sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
-          # 生成 CNAME 文件
-          echo 'blog.ruusu.cn' > CNAME
-          # 用 demo 的内容，先跑通
-          rm -rf content i18n
-          cp -r themes/hugo-theme-stack/demo/content content
+
+          # 直接用 demo 的全部文件作为项目基础
+          rm -rf config content i18n layouts static archetypes data go.mod hugo.toml
+          cp -r themes/hugo-theme-stack/demo/* .
+          cp themes/hugo-theme-stack/demo/go.mod .
+
           # 删掉 shortcodes 示例页（引用了不存在的短代码）
           rm -rf content/post/shortcodes
+
+          # 修改 baseURL 和 title
+          sed -i 's|baseURL = .*|baseURL = "https://blog.ruusu.cn/"|' config/_default/hugo.toml
+          sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
+
+          # 生成 CNAME
+          echo 'blog.ruusu.cn' > CNAME
+
+          echo "=== project structure ==="
+          ls -la
           echo "=== config files ==="
           ls config/_default/
           echo "=== content structure ==="

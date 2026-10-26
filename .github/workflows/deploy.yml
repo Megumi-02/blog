@@ -44,8 +44,10 @@ jobs:
           sed -i '/\[\[module.imports\]\]/,/^$/d' config/_default/hugo.toml
           echo 'theme = "hugo-theme-stack"' >> config/_default/hugo.toml
           # 改成用户的配置
-          sed -i 's|baseURL = .*|baseURL = "https://megumi-02.github.io/blog/"|' config/_default/hugo.toml
+          sed -i 's|baseURL = .*|baseURL = "https://blog.ruusu.cn/"|' config/_default/hugo.toml
           sed -i 's|title = .*|title = "bell"|' config/_default/hugo.toml
+          # 生成 CNAME 文件
+          echo 'blog.ruusu.cn' > CNAME
           # 用 demo 的内容，先跑通
           rm -rf content i18n
           cp -r themes/hugo-theme-stack/demo/content content

@@ -36,64 +36,43 @@ jobs:
 
       - name: Setup Stack theme
         run: |
-          # 克隆 Stack v4 主题
+          # 克隆 Stack 主题
           git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
 
           # 清理旧文件
           rm -rf config content i18n go.mod hugo.toml
 
-          # 创建最简配置，传统 theme 方式
-          cat > hugo.toml << 'ENDOFCONFIG'
+          # 复制 demo 的完整配置
+          mkdir -p config/_default
+          cp themes/hugo-theme-stack/demo/config/_default/params.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/languages.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/markup.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/menu.toml config/_default/
+          cp themes/hugo-theme-stack/demo/config/_default/related.toml config/_default/
+
+          # 自己写最简 hugo.toml
+          cat > config/_default/hugo.toml << 'ENDOFCONFIG'
           baseURL = "https://blog.ruusu.cn/"
           title = "bell"
           theme = "hugo-theme-stack"
           paginate = 10
           defaultContentLanguage = "en"
           hasCJKLanguage = true
-
-          [params]
-            description = "bell's Blog"
-            author = "bell"
           ENDOFCONFIG
 
-          # 创建示例内容
-          mkdir -p content/posts
-          cat > content/posts/_index.md << 'ENDOFMD'
-          ---
-          title: "Posts"
-          ---
-          ENDOFMD
+          # 复制 demo 的内容
+          cp -r themes/hugo-theme-stack/demo/content content
 
-          cat > content/posts/hello-world.md << 'ENDOFMD'
-          ---
-          title: "Hello World"
-          date: 2026-10-26
-          draft: false
-          ---
-
-          欢迎来到我的博客！
-
-          这是第一篇文章，使用 Hugo + Stack 主题构建。
-          ENDOFMD
-
-          mkdir -p content/about
-          cat > content/about/_index.md << 'ENDOFMD'
-          ---
-          title: "About"
-          ---
-
-          你好，我是 bell，一名 Ops Engineer。
-
-          这是我的个人博客，记录技术笔记和日常。
-          ENDOFMD
+          # 删掉 shortcodes 示例页
+          rm -rf content/post/shortcodes
 
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
-          echo "=== hugo.toml ==="
-          cat hugo.toml
-          echo "=== theme exists? ==="
-          ls themes/hugo-theme-stack/ | head -5
+          echo "=== config files ==="
+          ls config/_default/
+          echo "=== content structure ==="
+          find content -type f | head -20
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

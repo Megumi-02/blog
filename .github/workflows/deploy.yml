@@ -31,7 +31,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.120.0'
           extended: true
 
       - name: Setup Node
@@ -44,8 +44,13 @@ jobs:
           mkdir -p themes/hugo-theme-stack
           git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
 
+      - name: Install theme dependencies
+        run: |
+          cd themes/hugo-theme-stack
+          npm install
+
       - name: Build
-        run: hugo --minify --verbose
+        run: hugo --minify
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

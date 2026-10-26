@@ -42,7 +42,7 @@ jobs:
           # 清理旧文件
           rm -rf config content i18n go.mod hugo.toml
 
-          # 复制 demo 的完整配置
+          # 复制 demo 的配置
           mkdir -p config/_default
           cp themes/hugo-theme-stack/demo/config/_default/params.toml config/_default/
           cp themes/hugo-theme-stack/demo/config/_default/languages.toml config/_default/
@@ -60,19 +60,68 @@ jobs:
           hasCJKLanguage = true
           ENDOFCONFIG
 
-          # 复制 demo 的内容
+          # 修改 params.toml：设置头像、作者名、描述
+          sed -i 's|avatar = .*|avatar = "https://avatars.githubusercontent.com/u/98460303?v=4"|' config/_default/params.toml
+          sed -i 's|author = .*|author = "bell"|' config/_default/params.toml
+          sed -i 's|description = .*|description = "Ops Engineer"|' config/_default/params.toml
+
+          # 复制 demo 的内容结构
           cp -r themes/hugo-theme-stack/demo/content content
 
-          # 删掉 shortcodes 示例页
+          # 删掉所有演示文章，只保留页面结构
+          rm -rf content/post/*
           rm -rf content/post/shortcodes
+
+          # 创建第一篇博客
+          cat > content/post/hello-world.md << 'ENDOFMD'
+          ---
+          title: "你好，世界"
+          date: 2026-10-26
+          draft: false
+          tags: ["hello", "blog"]
+          categories: ["随笔"]
+          ---
+
+          你好，世界。
+
+          这是我的第一篇博客。我是 bell，一名运维工程师，日常和 Linux 服务器、网络、虚拟化与性能测试打交道。
+
+          这个博客用来记录技术笔记、排障经验、压测心得，还有一些折腾机器的日常。
+
+          技术栈：
+          - Linux（RedHat / Rocky）
+          - KVM 虚拟化
+          - 服务器运维与性能测试
+          - 交换机配置与网络调优
+
+          以后会慢慢把踩过的坑都写在这里。
+          ENDOFMD
+
+          # 更新 about 页面
+          cat > content/page/about/index.md << 'ENDOFMD'
+          ---
+          title: "About"
+          description: "关于我"
+          ---
+
+          你好，我是 bell。
+
+          一名运维工程师，日常和 Linux 服务器、网络、虚拟化与性能测试打交道。
+
+          平时在部署、排障、压测和自动化之间来回切换。做点东西，也顺手记点东西。
+
+          GitHub: https://github.com/Megumi-02
+          ENDOFMD
 
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
-          echo "=== config files ==="
-          ls config/_default/
-          echo "=== content structure ==="
-          find content -type f | head -20
+          echo "=== params.toml avatar ==="
+          grep avatar config/_default/params.toml
+          echo "=== posts ==="
+          ls content/post/
+          echo "=== pages ==="
+          ls content/page/
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

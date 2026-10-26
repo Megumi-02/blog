@@ -34,49 +34,93 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Setup project
+      - name: Setup PaperMod theme
         run: |
-          # 克隆主题
-          git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
+          # 克隆 PaperMod 主题
+          git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
 
           # 清理旧文件
-          rm -rf config content i18n go.mod hugo.toml archetypes data layouts static assets
+          rm -rf config content i18n go.mod hugo.toml
 
-          # 创建 config/_default 目录
-          mkdir -p config/_default
-
-          # 自己写最简 hugo.toml，纯传统 theme 方式，不用 module
-          cat > config/_default/hugo.toml << 'EOF'
+          # 创建配置
+          cat > hugo.toml << 'EOF'
 baseURL = "https://blog.ruusu.cn/"
 title = "bell"
-theme = "hugo-theme-stack"
-paginate = 10
-defaultContentLanguage = "en"
-hasCJKLanguage = true
+theme = "PaperMod"
+paginate = 5
+
+[params]
+  description = "bell's Blog"
+  author = "bell"
+  ShowToc = true
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 20
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 30
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 40
 EOF
 
-          # 复制 demo 的其他配置文件（除了 hugo.toml 和 module.toml）
-          cp themes/hugo-theme-stack/demo/config/_default/params.toml config/_default/
-          cp themes/hugo-theme-stack/demo/config/_default/languages.toml config/_default/
-          cp themes/hugo-theme-stack/demo/config/_default/markup.toml config/_default/
-          cp themes/hugo-theme-stack/demo/config/_default/menu.toml config/_default/
-          cp themes/hugo-theme-stack/demo/config/_default/related.toml config/_default/
+          # 创建示例内容
+          mkdir -p content/posts
+          cat > content/posts/_index.md << 'EOF'
+---
+title: "Posts"
+---
+EOF
 
-          # 复制 demo 的内容
-          cp -r themes/hugo-theme-stack/demo/content content
+          cat > content/posts/hello-world.md << 'EOF'
+---
+title: "Hello World"
+date: 2026-10-26
+draft: false
+tags: ["hugo", "paperMod"]
+---
 
-          # 删掉 shortcodes 示例页
-          rm -rf content/post/shortcodes
+欢迎来到我的博客！
+
+这是第一篇文章，使用 Hugo + PaperMod 主题构建。
+EOF
+
+          mkdir -p content/about
+          cat > content/about/_index.md << 'EOF'
+---
+title: "About"
+---
+
+你好，我是 bell，一名 Ops Engineer。
+
+这是我的个人博客，记录技术笔记和日常。
+EOF
 
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
           echo "=== hugo.toml ==="
-          cat config/_default/hugo.toml
-          echo "=== config files ==="
-          ls config/_default/
-          echo "=== theme exists? ==="
-          ls themes/hugo-theme-stack/ | head -10
+          cat hugo.toml
+          echo "=== content structure ==="
+          find content -type f
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

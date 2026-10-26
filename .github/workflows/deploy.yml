@@ -34,20 +34,10 @@ jobs:
           hugo-version: '0.120.0'
           extended: true
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Fetch Stack theme
         run: |
           mkdir -p themes/hugo-theme-stack
           git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
-
-      - name: Install theme dependencies
-        run: |
-          cd themes/hugo-theme-stack
-          npm install
 
       - name: Build
         run: hugo --minify

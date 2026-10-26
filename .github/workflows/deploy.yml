@@ -28,16 +28,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
-          hugo-version: '0.120.0'
+          go-version: '1.22'
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
           extended: true
 
-      - name: Fetch Stack theme
+      - name: Hugo mod init
         run: |
-          mkdir -p themes/hugo-theme-stack
-          git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
+          if [ ! -f go.mod ]; then
+            hugo mod init github.com/Megumi-02/blog
+          fi
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

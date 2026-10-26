@@ -43,76 +43,76 @@ jobs:
           rm -rf config content i18n go.mod hugo.toml
 
           # 创建配置
-          cat > hugo.toml << 'EOF'
-baseURL = "https://blog.ruusu.cn/"
-title = "bell"
-theme = "PaperMod"
-paginate = 5
+          cat > hugo.toml << 'ENDOFCONFIG'
+          baseURL = "https://blog.ruusu.cn/"
+          title = "bell"
+          theme = "PaperMod"
+          paginate = 5
 
-[params]
-  description = "bell's Blog"
-  author = "bell"
-  ShowToc = true
-  ShowReadingTime = true
-  ShowShareButtons = true
-  ShowPostNavLinks = true
-  ShowBreadCrumbs = true
-  ShowCodeCopyButtons = true
+          [params]
+            description = "bell's Blog"
+            author = "bell"
+            ShowToc = true
+            ShowReadingTime = true
+            ShowShareButtons = true
+            ShowPostNavLinks = true
+            ShowBreadCrumbs = true
+            ShowCodeCopyButtons = true
 
-[menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 10
-  [[menu.main]]
-    identifier = "posts"
-    name = "Posts"
-    url = "/posts/"
-    weight = 20
-  [[menu.main]]
-    identifier = "tags"
-    name = "Tags"
-    url = "/tags/"
-    weight = 30
-  [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "/about/"
-    weight = 40
-EOF
+          [menu]
+            [[menu.main]]
+              identifier = "home"
+              name = "Home"
+              url = "/"
+              weight = 10
+            [[menu.main]]
+              identifier = "posts"
+              name = "Posts"
+              url = "/posts/"
+              weight = 20
+            [[menu.main]]
+              identifier = "tags"
+              name = "Tags"
+              url = "/tags/"
+              weight = 30
+            [[menu.main]]
+              identifier = "about"
+              name = "About"
+              url = "/about/"
+              weight = 40
+          ENDOFCONFIG
 
           # 创建示例内容
           mkdir -p content/posts
-          cat > content/posts/_index.md << 'EOF'
----
-title: "Posts"
----
-EOF
+          cat > content/posts/_index.md << 'ENDOFMD'
+          ---
+          title: "Posts"
+          ---
+          ENDOFMD
 
-          cat > content/posts/hello-world.md << 'EOF'
----
-title: "Hello World"
-date: 2026-10-26
-draft: false
-tags: ["hugo", "paperMod"]
----
+          cat > content/posts/hello-world.md << 'ENDOFMD'
+          ---
+          title: "Hello World"
+          date: 2026-10-26
+          draft: false
+          tags: ["hugo", "paperMod"]
+          ---
 
-欢迎来到我的博客！
+          欢迎来到我的博客！
 
-这是第一篇文章，使用 Hugo + PaperMod 主题构建。
-EOF
+          这是第一篇文章，使用 Hugo + PaperMod 主题构建。
+          ENDOFMD
 
           mkdir -p content/about
-          cat > content/about/_index.md << 'EOF'
----
-title: "About"
----
+          cat > content/about/_index.md << 'ENDOFMD'
+          ---
+          title: "About"
+          ---
 
-你好，我是 bell，一名 Ops Engineer。
+          你好，我是 bell，一名 Ops Engineer。
 
-这是我的个人博客，记录技术笔记和日常。
-EOF
+          这是我的个人博客，记录技术笔记和日常。
+          ENDOFMD
 
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME

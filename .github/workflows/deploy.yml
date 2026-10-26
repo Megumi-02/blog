@@ -50,35 +50,59 @@ jobs:
           cp themes/hugo-theme-stack/demo/config/_default/menu.toml config/_default/
           cp themes/hugo-theme-stack/demo/config/_default/related.toml config/_default/
 
-          # 自己写最简 hugo.toml
+          # 写 hugo.toml，默认语言中文
           cat > config/_default/hugo.toml << 'ENDOFCONFIG'
           baseURL = "https://blog.ruusu.cn/"
           title = "bell"
           theme = "hugo-theme-stack"
           paginate = 10
-          defaultContentLanguage = "en"
+          defaultContentLanguage = "zh"
           hasCJKLanguage = true
           ENDOFCONFIG
 
-          # 修改 params.toml：设置头像、作者名、描述
+          # 修改 params.toml：头像、作者、简介
           sed -i 's|avatar = .*|avatar = "https://avatars.githubusercontent.com/u/98460303?v=4"|' config/_default/params.toml
           sed -i 's|author = .*|author = "bell"|' config/_default/params.toml
-          sed -i 's|description = .*|description = "Ops Engineer"|' config/_default/params.toml
+          sed -i 's|description = .*|description = "运维工程师 · 折腾机器的人"|' config/_default/params.toml
+
+          # 修改 menu.toml：改成中文菜单
+          cat > config/_default/menu.toml << 'ENDOFMENU'
+          [[main]]
+            identifier = "home"
+            name = "首页"
+            url = "/"
+            weight = 10
+          [[main]]
+            identifier = "about"
+            name = "关于"
+            url = "/page/about/"
+            weight = 20
+          [[main]]
+            identifier = "archives"
+            name = "归档"
+            url = "/page/archives/"
+            weight = 30
+          [[main]]
+            identifier = "links"
+            name = "链接"
+            url = "/page/links/"
+            weight = 40
+          ENDOFMENU
 
           # 复制 demo 的内容结构
           cp -r themes/hugo-theme-stack/demo/content content
 
-          # 删掉所有演示文章，只保留页面结构
+          # 删掉所有演示文章
           rm -rf content/post/*
           rm -rf content/post/shortcodes
 
-          # 创建第一篇博客
+          # 创建第一篇博客（中文）
           cat > content/post/hello-world.md << 'ENDOFMD'
           ---
           title: "你好，世界"
           date: 2026-10-26
           draft: false
-          tags: ["hello", "blog"]
+          tags: ["随笔"]
           categories: ["随笔"]
           ---
 
@@ -88,7 +112,7 @@ jobs:
 
           这个博客用来记录技术笔记、排障经验、压测心得，还有一些折腾机器的日常。
 
-          技术栈：
+          技术方向：
           - Linux（RedHat / Rocky）
           - KVM 虚拟化
           - 服务器运维与性能测试
@@ -97,10 +121,10 @@ jobs:
           以后会慢慢把踩过的坑都写在这里。
           ENDOFMD
 
-          # 更新 about 页面
-          cat > content/page/about/index.md << 'ENDOFMD'
+          # 更新 about 页面（中文）
+          cat > content/page/about/index.zh.md << 'ENDOFMD'
           ---
-          title: "About"
+          title: "关于我"
           description: "关于我"
           ---
 
@@ -116,12 +140,10 @@ jobs:
           # 生成 CNAME
           echo 'blog.ruusu.cn' > CNAME
 
-          echo "=== params.toml avatar ==="
-          grep avatar config/_default/params.toml
-          echo "=== posts ==="
-          ls content/post/
-          echo "=== pages ==="
-          ls content/page/
+          echo "=== hugo.toml ==="
+          cat config/_default/hugo.toml
+          echo "=== menu ==="
+          cat config/_default/menu.toml
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

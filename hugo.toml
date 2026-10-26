@@ -2,9 +2,10 @@ baseURL = "https://blog.ruusu.cn/"
 title = "bell"
 theme = "PaperMod"
 paginate = 5
+hasCJKLanguage = true
 
 [params]
-  description = "bell's Blog"
+  description = "运维工程师 · 折腾机器的人"
   author = "bell"
   ShowToc = true
   ShowReadingTime = true
@@ -16,21 +17,21 @@ paginate = 5
 [menu]
   [[menu.main]]
     identifier = "home"
-    name = "Home"
+    name = "首页"
     url = "/"
     weight = 10
   [[menu.main]]
     identifier = "posts"
-    name = "Posts"
+    name = "文章"
     url = "/posts/"
     weight = 20
   [[menu.main]]
     identifier = "tags"
-    name = "Tags"
+    name = "标签"
     url = "/tags/"
     weight = 30
   [[menu.main]]
     identifier = "about"
-    name = "About"
+    name = "关于"
     url = "/about/"
     weight = 40

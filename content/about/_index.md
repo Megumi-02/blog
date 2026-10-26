@@ -1,8 +1,7 @@
 ---
-title: "关于"
+title: "About"
 ---
 
-我是 bell，一名运维工程师，日常和 Linux 服务器、网络、虚拟化与性能测试打交道。
+你好，我是 bell，一名 Ops Engineer。
 
-- GitHub: [Megumi-02](https://github.com/Megumi-02)
-- 个人主页: [megumi-02.github.io](https://megumi-02.github.io)
+这是我的个人博客，记录技术笔记和日常。

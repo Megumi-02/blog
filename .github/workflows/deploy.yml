@@ -34,52 +34,26 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Setup PaperMod theme
+      - name: Setup Stack theme
         run: |
-          # 克隆 PaperMod 主题
-          git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+          # 克隆 Stack v4 主题
+          git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git themes/hugo-theme-stack
 
           # 清理旧文件
           rm -rf config content i18n go.mod hugo.toml
 
-          # 创建配置
+          # 创建最简配置，传统 theme 方式
           cat > hugo.toml << 'ENDOFCONFIG'
           baseURL = "https://blog.ruusu.cn/"
           title = "bell"
-          theme = "PaperMod"
-          paginate = 5
+          theme = "hugo-theme-stack"
+          paginate = 10
+          defaultContentLanguage = "en"
+          hasCJKLanguage = true
 
           [params]
             description = "bell's Blog"
             author = "bell"
-            ShowToc = true
-            ShowReadingTime = true
-            ShowShareButtons = true
-            ShowPostNavLinks = true
-            ShowBreadCrumbs = true
-            ShowCodeCopyButtons = true
-
-          [menu]
-            [[menu.main]]
-              identifier = "home"
-              name = "Home"
-              url = "/"
-              weight = 10
-            [[menu.main]]
-              identifier = "posts"
-              name = "Posts"
-              url = "/posts/"
-              weight = 20
-            [[menu.main]]
-              identifier = "tags"
-              name = "Tags"
-              url = "/tags/"
-              weight = 30
-            [[menu.main]]
-              identifier = "about"
-              name = "About"
-              url = "/about/"
-              weight = 40
           ENDOFCONFIG
 
           # 创建示例内容
@@ -95,12 +69,11 @@ jobs:
           title: "Hello World"
           date: 2026-10-26
           draft: false
-          tags: ["hugo", "paperMod"]
           ---
 
           欢迎来到我的博客！
 
-          这是第一篇文章，使用 Hugo + PaperMod 主题构建。
+          这是第一篇文章，使用 Hugo + Stack 主题构建。
           ENDOFMD
 
           mkdir -p content/about
@@ -119,8 +92,8 @@ jobs:
 
           echo "=== hugo.toml ==="
           cat hugo.toml
-          echo "=== content structure ==="
-          find content -type f
+          echo "=== theme exists? ==="
+          ls themes/hugo-theme-stack/ | head -5
 
       - name: Build
         run: hugo --minify 2>&1 | tee build.log

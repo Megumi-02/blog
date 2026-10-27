@@ -9,3 +9,7 @@ title: "关于我"
 平时在部署、排障、压测和自动化之间来回切换。做点东西，也顺手记点东西。
 
 GitHub: https://github.com/Megumi-02
+
+---
+
+<a href="https://beian.miit.gov.cn/" target="_blank">皖ICP备2025101620号-1</a>

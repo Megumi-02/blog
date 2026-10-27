@@ -5,6 +5,7 @@ paginate = 5
 hasCJKLanguage = true
 
 [params]
+  copyright = '© 2026 bell | <a href="https://beian.miit.gov.cn/" target="_blank">皖ICP备2025101620号-1</a>'
   description = "运维工程师 · 折腾机器的人"
   author = "bell"
   ShowToc = true
